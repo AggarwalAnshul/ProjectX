@@ -57,14 +57,8 @@ public class startTest extends AppCompatActivity implements View.OnClickListener
         }
 
         questionCount = getTotalQuestions(tableName);
-        ArrayList<Integer> sequence = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < questionCount; i++) {
-            sequence.add(i);
-        }
-        /*randomly organising the sequence list*/
 
-
+        /*storing the questions here in the arrayList*/
         sqLiteDatabase = openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE, null);
         String query = "select * from " + tableName + ";";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
@@ -77,13 +71,17 @@ public class startTest extends AppCompatActivity implements View.OnClickListener
             questions.add(temp);
             cursor.moveToNext();
         }
+        cursor.close();
+        sqLiteDatabase.close();
 
+        Random random = new Random();
         for (int i = questionCount - 1; i > 0; i--) {
             int j = random.nextInt(i + 1);
             ArrayList<String> temp =  questions.get(i);
             questions.set(i, questions.get(j));
             questions.set(j, temp);
         }
+        /*randomly organising the sequence list*/
 
 
         generateQuestion(currentIndex);
